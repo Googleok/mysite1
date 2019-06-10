@@ -58,7 +58,7 @@ public class GuestbookDao {
 			String sql =
 				" insert" + 
 				"   into guestbook" + 
-				" values(null, ?, ?, ?, now())";
+				" values(default, ?, ?, ?, now())";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getName());
@@ -95,7 +95,7 @@ public class GuestbookDao {
 		try {
 			conn = getConnection();
 			
-			String sql = "select no, name, contents, date_format(reg_date, '%Y-%m-%d %h:%i:%s') from guestbook order by reg_date desc";
+			String sql = "select no, name, contents, to_char(reg_date, 'YYYY-MM-DD') from guestbook order by reg_date desc";
 			pstmt = conn.prepareStatement(sql);
 			
 			rs = pstmt.executeQuery();
@@ -134,11 +134,24 @@ public class GuestbookDao {
 		return result;
 	}	
 	
+//	private Connection getConnection() throws SQLException {
+//		Connection conn = null;
+//		try {
+//			Class.forName("org.mariadb.jdbc.Driver");
+//			String url = "jdbc:mariadb://192.168.1.123:3307/webdb?characterEncoding=utf8";
+//			conn = DriverManager.getConnection(url, "webdb", "webdb");
+//
+//		} catch (ClassNotFoundException e) {
+//			System.out.println("드라이버 로딩 실패:" + e);
+//		}
+//		return conn;
+//	}
+	
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.1.123:3307/webdb?characterEncoding=utf8";
+			Class.forName("org.postgresql.Driver");
+			String url = "jdbc:postgresql://192.168.1.123:5432/webdb?characterEncoding=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 
 		} catch (ClassNotFoundException e) {
